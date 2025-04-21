@@ -1,0 +1,531 @@
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #ffffff;
+  min-height: 100vh;
+  border-left: 50px solid #1db954;
+  border-right: 50px solid #1db954;
+
+}
+.container {
+  max-width: calc(100% - 500px);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+h1 {
+  text-align: center;
+  color: #1db954;
+  margin-top: 30px;
+  margin-bottom: 24px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  background: #1db954;
+  color: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #17a74a;
+}
+
+/* เลย์เอาท์แนวนอน */
+.horizontal-layout {
+  display: flex;
+  flex-direction: row-reverse; /* สลับให้ player อยู่ทางขวา */
+  gap: 24px;
+  margin-top: 24px;
+  min-height: 500px;
+}
+
+/* ส่วนเครื่องเล่นหลัก (ขวา) */
+.main-player-area {
+  flex: 2;
+  transition: all 0.5s ease;
+}
+
+.active-player {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  animation: slide-in-right 0.5s ease;
+}
+
+.now-playing {
+  color: #1db954;
+  font-size: 22px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.video-wrapper {
+  position: relative;
+  padding-top: 62%; /* 16:9 Aspect Ratio */
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.close-button-container {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.no-songs {
+  text-align: center;
+  color: #999;
+  padding: 32px 0;
+}
+/* เพิ่มเติมจาก global.css ที่มีอยู่แล้ว */
+
+/* สไตล์สำหรับหัวข้อ Now Playing */
+.now-playing {
+  color: #1db954;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+  padding: 8px;
+  background-color: rgba(29, 185, 84, 0.1);
+  border-radius: 8px;
+}
+
+/* สไตล์สำหรับรายการเพลง */
+.song-list-container {
+  margin-top: 30px;
+  transition: all 0.3s ease;
+}
+
+.song-list-title {
+  text-align: center;
+  color: #ccc;
+  font-size: 18px;
+  margin-bottom: 16px;
+  font-weight: normal;
+}
+
+/* สไตล์สำหรับรายการแบบย่อ */
+.compact-list {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.compact-list li {
+  max-height: 350px;
+  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* สไตล์สำหรับเพลงที่กำลังเล่น */
+.active-song {
+  border-left: 4px solid #1db954;
+  box-shadow: 0 0 15px rgba(29, 185, 84, 0.3);
+}
+
+/* ปรับหน้า Player */
+.player-container {
+  scroll-margin-top: 20px;
+  background-color: #171717;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+}
+
+/* ปรับขอบเขตของหน้าเว็บ */
+.container {
+  overflow-x: hidden;
+  padding-bottom: 50px;
+}
+
+/* เพิ่มเติมเพื่อความสวยงาม */
+body {
+  min-height: 100vh;
+}
+
+/* ปรับแต่งปุ่มปิด */
+.close-button-container button {
+  background-color: #333;
+}
+
+.close-button-container button:hover {
+  background-color: #555;
+}
+/* global.css - ส่วนที่เพิ่มเติมสำหรับเลย์เอาท์แนวนอน */
+
+/* Reset ค่าเริ่มต้น */
+
+.active-player-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.empty-player {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(30, 30, 30, 0.5);
+  border-radius: 12px;
+  padding: 40px;
+  font-size: 18px;
+  color: #888;
+  text-align: center;
+  border: 2px dashed #333;
+}
+
+/* ส่วนรายการเพลง (ซ้าย) */
+.playlist-container {
+  flex: 1;
+  background-color: rgba(20, 20, 20, 0.7);
+  border-radius: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 600px;
+  transition: all 0.5s ease;
+}
+
+.playlist-title {
+  color: #ccc;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: normal;
+}
+
+.song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.song-item {
+  display: flex;
+  background: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: slide-in-left 0.5s ease;
+}
+
+.song-item:hover {
+  transform: translateX(5px);
+  background: #252525;
+}
+
+.song-item.active-song {
+  border-left: 4px solid #1db954;
+  background-color: #252525;
+}
+
+.song-thumbnail-small {
+  position: relative;
+  width: 120px;
+  min-width: 120px;
+  height: 68px;
+}
+
+.song-thumbnail-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-info {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.song-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* โหลดเดอร์ */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.spinner {
+  border: 4px solid rgba(29, 185, 84, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #1db954;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  max-width: 500px;
+  margin: 0 auto 20px;
+  padding: 16px;
+  background-color: rgba(220, 38, 38, 0.8);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Animation */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Media queries สำหรับรองรับการแสดงผลในหน้าจอขนาดเล็ก */
+@media (max-width: 768px) {
+  .horizontal-layout {
+    flex-direction: column;
+  }
+  
+  .song-item {
+    animation: none;
+  }
+  
+  .active-player {
+    animation: none;
+  }
+  
+  .playlist-container {
+    max-height: 300px;
+  }
+}
+/* เพิ่ม CSS สำหรับระบบเพลย์ลิสต์ */
+
+/* ปุ่มสลับมุมมอง */
+.view-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.toggle-btn {
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  background-color: #333;
+  color: #ddd;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background-color: #1db954;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ส่วนหัวของเพลย์ลิสต์ */
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.playlist-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.play-all-btn, .clear-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 30px;
+}
+
+.play-all-btn {
+  background-color: #1db954;
+}
+
+.clear-btn {
+  background-color: #ce4a4a;
+}
+
+/* รายการเพลงในเพลย์ลิสต์ */
+.playlist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.song-content {
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+}
+
+.playlist-item-actions, .song-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.remove-btn, .add-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0;
+  margin: 0 8px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.remove-btn {
+  background-color: #ce4a4a;
+}
+
+.add-btn {
+  background-color: #1db954;
+  font-weight: bold;
+}
+
+.remove-btn:hover, .add-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ข้อความเมื่อเพลย์ลิสต์ว่าง */
+.empty-playlist {
+  text-align: center;
+  padding: 30px 15px;
+  color: #888;
+}
+
+.empty-playlist p {
+  margin: 5px 0;
+}
+
+/* ปุ่มควบคุมเพิ่มเติมในเครื่องเล่น */
+.active-player-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.playlist-control-btn {
+  background-color: #333;
+}
+
+.add-to-playlist-btn {
+  background-color: #1db954;
+}
+
+/* อนิเมชันสำหรับเพลงที่กำลังเล่น */
+@keyframes playing-animation {
+  0% {
+    border-left-color: #1db954;
+  }
+  50% {
+    border-left-color: #19a34a;
+  }
+  100% {
+    border-left-color: #1db954;
+  }
+}
+
+.active-song {
+  border-left: 4px solid #1db954;
+  background-color: #252525;
+  animation: playing-animation 2s infinite;
+}
+
+/* ปรับแต่งสไตล์เพิ่มเติม */
+.song-item {
+  position: relative;
+  overflow: hidden;
+}
+
+/* เมื่อ hover ที่เพลง */
+.song-item:hover .song-item-actions,
+.song-item:hover .playlist-item-actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.song-item-actions,
+.playlist-item-actions {
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .playlist-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .playlist-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
