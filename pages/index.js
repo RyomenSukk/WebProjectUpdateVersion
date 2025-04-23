@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from "react";
-// ต้องแน่ใจว่าได้มีการ import global.css ในไฟล์ที่เหมาะสม
-// เช่น ใน _app.js หรือ layout.js ด้วยคำสั่ง import '../styles/global.css';
 
 export default function Home() {
   const [songs, setSongs] = useState([]);
@@ -52,12 +52,12 @@ export default function Home() {
   // Extract YouTube ID from a full URL
   const getYoutubeId = (url) => {
     if (!url) return null;
-    
+
     // If it's already just an ID
     if (!url.includes("http") && url.length > 5) {
       return url;
     }
-    
+
     try {
       const urlObj = new URL(url);
       if (urlObj.hostname.includes("youtube.com")) {
@@ -68,7 +68,7 @@ export default function Home() {
     } catch (e) {
       return null;
     }
-    
+
     return null;
   };
 
@@ -91,13 +91,13 @@ export default function Home() {
   // ฟังก์ชันสำหรับช่วยหาข้อมูลเพลงที่กำลังเล่น
   const getActiveSong = () => {
     if (!activeVideo || (!Array.isArray(songs) && !playlist.length)) return null;
-    
+
     // ค้นหาในรายการเพลงปกติก่อน
     if (Array.isArray(songs)) {
       const fromSongs = songs.find(song => getYoutubeId(song.youtube_url) === activeVideo);
       if (fromSongs) return fromSongs;
     }
-    
+
     // ถ้าไม่พบในรายการเพลงปกติ ให้ค้นหาในเพลย์ลิสต์
     return playlist.find(song => getYoutubeId(song.youtube_url) === activeVideo);
   };
@@ -110,7 +110,7 @@ export default function Home() {
     const songExists = playlist.some(
       item => getYoutubeId(item.youtube_url) === getYoutubeId(song.youtube_url)
     );
-    
+
     if (!songExists) {
       const newPlaylist = [...playlist, song];
       setPlaylist(newPlaylist);
@@ -125,7 +125,7 @@ export default function Home() {
     const newPlaylist = [...playlist];
     newPlaylist.splice(index, 1);
     setPlaylist(newPlaylist);
-    
+
     // ถ้ากำลังเล่นเพลงจากเพลย์ลิสต์และลบเพลงที่กำลังเล่นอยู่
     if (playingFromPlaylist && index === currentPlaylistIndex) {
       if (newPlaylist.length > 0) {
@@ -149,7 +149,7 @@ export default function Home() {
     if (confirm("คุณต้องการล้างเพลย์ลิสต์ทั้งหมดหรือไม่?")) {
       setPlaylist([]);
       localStorage.removeItem("musicPlaylist");
-      
+
       if (playingFromPlaylist) {
         setActiveVideo(null);
         setPlayingFromPlaylist(false);
@@ -174,7 +174,7 @@ export default function Home() {
   // เล่นเพลงถัดไปในเพลย์ลิสต์
   const playNextSong = () => {
     if (!playingFromPlaylist || playlist.length === 0) return;
-    
+
     const nextIndex = (currentPlaylistIndex + 1) % playlist.length;
     playPlaylistSong(nextIndex);
   };
@@ -182,7 +182,7 @@ export default function Home() {
   // เล่นเพลงก่อนหน้าในเพลย์ลิสต์
   const playPreviousSong = () => {
     if (!playingFromPlaylist || playlist.length === 0) return;
-    
+
     const prevIndex = (currentPlaylistIndex - 1 + playlist.length) % playlist.length;
     playPlaylistSong(prevIndex);
   };
@@ -193,13 +193,13 @@ export default function Home() {
       alert("ต้องมีเพลงในเพลย์ลิสต์อย่างน้อย 2 เพลง");
       return;
     }
-    
+
     // สุ่มเลือกเพลงที่ไม่ใช่เพลงปัจจุบัน
     let randomIndex;
     do {
       randomIndex = Math.floor(Math.random() * playlist.length);
     } while (randomIndex === currentPlaylistIndex && playlist.length > 1);
-    
+
     playPlaylistSong(randomIndex);
   };
 
@@ -212,8 +212,13 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>Music Library</h1>
-      
+      <div className="header-bar">
+        <button onClick={() => window.location.href = "/login"} className="login-btn">
+          🔐 For Admin
+        </button>
+      </div>
+      <h1>Music Chord</h1>
+
       {error && (
         <div className="error-message">
           <p>{error}</p>
@@ -228,20 +233,20 @@ export default function Home() {
         <>
           {/* ปุ่มสลับระหว่างรายการเพลงและเพลย์ลิสต์ */}
           <div className="view-toggle">
-            <button 
+            <button
               className={`toggle-btn ${!showPlaylist ? 'active' : ''}`}
               onClick={() => setShowPlaylist(false)}
             >
               รายการเพลงทั้งหมด
             </button>
-            <button 
+            <button
               className={`toggle-btn ${showPlaylist ? 'active' : ''}`}
               onClick={() => setShowPlaylist(true)}
             >
               เพลย์ลิสต์ของฉัน {playlist.length > 0 && `(${playlist.length})`}
             </button>
           </div>
-          
+
           <div className="horizontal-layout">
             {/* ส่วนแสดงคลิปขนาดใหญ่ด้านขวา */}
             <div className="main-player-area">
@@ -249,7 +254,7 @@ export default function Home() {
                 <div className="active-player">
                   <h2 className="now-playing">{activeSong?.title} - {activeSong?.artist}</h2>
                   <div className="video-wrapper">
-                    <iframe 
+                    <iframe
                       src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1&rel=0`}
                       title="YouTube video player"
                       frameBorder="0"
@@ -283,7 +288,7 @@ export default function Home() {
                       </button>
                     )}
                     {!playingFromPlaylist && activeSong && (
-                      <button 
+                      <button
                         onClick={() => addToPlaylist(activeSong)}
                         className="add-to-playlist-btn"
                       >
@@ -298,7 +303,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-            
+
             {/* ส่วนแสดงรายการเพลงด้านซ้าย */}
             <div className="playlist-container">
               {showPlaylist ? (
@@ -307,14 +312,14 @@ export default function Home() {
                     <h3 className="playlist-title">เพลย์ลิสต์ของฉัน</h3>
                     {playlist.length > 0 && (
                       <div className="playlist-actions">
-                        <button 
+                        <button
                           onClick={() => playPlaylistSong(0)}
                           className="play-all-btn"
                           disabled={playlist.length === 0}
                         >
                           ▶️ เล่นทั้งหมด
                         </button>
-                        <button 
+                        <button
                           onClick={clearPlaylist}
                           className="clear-btn"
                           disabled={playlist.length === 0}
@@ -329,19 +334,19 @@ export default function Home() {
                       playlist.map((song, index) => {
                         const youtubeId = getYoutubeId(song.youtube_url);
                         const isActive = playingFromPlaylist && currentPlaylistIndex === index;
-                        
+
                         return (
-                          <div 
-                            key={`playlist-${index}`} 
+                          <div
+                            key={`playlist-${index}`}
                             className={`song-item playlist-item ${isActive ? 'active-song' : ''}`}
                           >
-                            <div 
+                            <div
                               className="song-content"
                               onClick={() => playPlaylistSong(index)}
                             >
                               <div className="song-thumbnail-small">
-                                <img 
-                                  src={getThumbnailUrl(youtubeId)} 
+                                <img
+                                  src={getThumbnailUrl(youtubeId)}
                                   alt={`${song.title} thumbnail`}
                                 />
                                 <div className="thumbnail-overlay">
@@ -358,7 +363,7 @@ export default function Home() {
                               </div>
                             </div>
                             <div className="playlist-item-actions">
-                              <button 
+                              <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   removeFromPlaylist(index);
@@ -388,19 +393,19 @@ export default function Home() {
                       songs.map((song) => {
                         const youtubeId = getYoutubeId(song.youtube_url);
                         const isActive = !playingFromPlaylist && activeVideo === youtubeId;
-                        
+
                         return (
-                          <div 
-                            key={song.id} 
+                          <div
+                            key={song.id}
                             className={`song-item ${isActive ? 'active-song' : ''}`}
                           >
-                            <div 
-                              className="song-content" 
+                            <div
+                              className="song-content"
                               onClick={() => playSong(song.youtube_url)}
                             >
                               <div className="song-thumbnail-small">
-                                <img 
-                                  src={getThumbnailUrl(youtubeId)} 
+                                <img
+                                  src={getThumbnailUrl(youtubeId)}
                                   alt={`${song.title} thumbnail`}
                                 />
                                 <div className="thumbnail-overlay">
@@ -417,7 +422,7 @@ export default function Home() {
                               </div>
                             </div>
                             <div className="song-item-actions">
-                              <button 
+                              <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   addToPlaylist(song);
